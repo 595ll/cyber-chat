@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Layout, Input, List, Avatar, Collapse } from 'antd';
+import { Layout, Input, List, Avatar, Collapse, Modal, Button, message as messageC } from 'antd';
 import {
     LoadingOutlined,
 } from '@ant-design/icons';
@@ -25,6 +25,9 @@ const DeepseekSvg = () => (<svg t="1741527216793" class="icon" viewBox="0 0 1024
 const SeekSvg = () => (<svg t="1741525982501" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3196" width="18" height="18"><path d="M168.64 168.64C263.424 73.792 494.08 150.72 683.712 340.288c189.632 189.696 266.56 420.288 171.712 515.136-94.848 94.848-325.44 17.92-515.136-171.712C150.656 494.08 73.792 263.424 168.64 168.64z m469.824 216.96C470.592 217.728 275.2 152.576 213.888 213.888c-61.312 61.312 3.84 256.704 171.712 424.576 167.872 167.872 363.264 232.96 424.576 171.712 61.312-61.312-3.84-256.704-171.712-424.576z" fill="#3888FF" p-id="3197"></path><path d="M340.288 340.288C529.984 150.656 760.576 73.792 855.424 168.64c94.848 94.784 17.92 325.44-171.712 515.072S263.424 950.272 168.64 855.424C73.792 760.576 150.72 529.92 340.288 340.288z m469.888-126.4c-61.312-61.312-256.704 3.84-424.576 171.712C217.728 553.472 152.576 748.8 213.888 810.176c61.312 61.312 256.704-3.84 424.576-171.712 167.872-167.872 232.96-363.264 171.712-424.576z" fill="#3888FF" p-id="3198"></path><path d="M512 512m-69.376 0a69.376 69.376 0 1 0 138.752 0 69.376 69.376 0 1 0-138.752 0Z" fill="#3888FF" p-id="3199"></path></svg>)
 
 const ChatInterface = () => {
+    const [authCode, setAuthCode] = useState();
+    const [submitLoading, setSubmitLoading] = useState(false);
+    const [open, setOpen] = useState(false);
     const [controller, setController] = useState(null);
     const [activeKey, setActiveKey] = useState({})
     const [think, setThink] = useState({});
@@ -37,6 +40,7 @@ const ChatInterface = () => {
     const thinkEndRef = useRef(null);
     const currentTimestampRef = useRef(null);
     const [isAbort, setIsAbort] = useState(false);
+    const [messageApi, contextHolder] = messageC.useMessage();
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -50,13 +54,7 @@ const ChatInterface = () => {
     }, [think, fortune, stopScroll]);
 
     useEffect(() => {
-        const handleScroll = () => {
-            console.debug('sccccccc')
-            setStopScroll(true);
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        setOpen(true);
     }, []);
 
     useEffect(() => {
@@ -168,84 +166,106 @@ const ChatInterface = () => {
     }
 
     return (
-        <Layout className="layout-container">
-            <Header className="header">
-                <h1 style={{ color: 'white', margin: 0 }}>Cyber Test</h1>
-            </Header>
+        <>
+            <Layout className="layout-container">
+                <Header className="header">
+                    <h1 style={{ color: 'white', margin: 0 }}>Cyber Test</h1>
+                </Header>
 
-            <Content className="content">
-                <List
-                    className='list'
-                    bordered={false}
-                    dataSource={message}
-                    split={false}
-                    locale={{
-                        emptyText: <div style={{ display: 'inline-flex', alignItems: 'center', flexFlow: 'column' }}>
-                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#333', fontSize: 18, fontWeight: 500 }}>
-                                <Icon style={{ height: 100 }} component={DeepseekSvg} />Cyber-D1</div>
-                            <span style={{ color: '#333' }}>我可以帮你搜索、答疑、推理、写作、提建议，请把你的想法告诉我吧。</span>
-                        </div>
-                    }}
-                    renderItem={item => (
-                        <List.Item
-                            className={`message-item ${item.isBot ? 'bot' : 'user'}`}
-                        >
-                            <div className="message-container">
-                                {item.isBot && <Avatar
-                                    size='large'
-                                    style={{ backgroundColor: '#fff' }}
-                                    icon={<Icon component={DeepseekSvg} />}
-                                />}
-                                <div className={`message-content ${item.isBot ? 'bot-content' : 'user-content'}`}>
-                                    {
-                                        item.isBot ?
-                                            <>
-                                                <Collapse
-                                                    activeKey={activeKey?.[item?.timestamp]}
-                                                    onChange={(val) => setActiveKey((pre) => ({ ...pre, [item?.timestamp]: val?.[0] === '1' ? val : null }))}
-                                                    bordered={false}
-                                                    items={[{
-                                                        key: '1', label: <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Icon style={{ width: 18, height: 18 }} component={SeekSvg} /><p className='think-title'>{fortune?.[item?.timestamp] ? '已深度思考' : '思考中:'}</p></div>, children:
-                                                            <>
-                                                                {
-                                                                    think?.[item?.timestamp] || fortune?.[item?.timestamp] ?
-                                                                        <p className='think-text'>{think?.[item?.timestamp]}<div ref={thinkEndRef} /></p>
-                                                                        : <LoadingOutlined />
-                                                                }
-                                                            </>
-                                                    }]}
-                                                />
-                                                {fortune?.[item?.timestamp] && <ReactMarkdown remarkPlugins={[remarkGfm, rehypeHighlight]}>
-                                                    {fortune?.[item?.timestamp]}
-                                                </ReactMarkdown>}
-                                                {isAbort[item?.timestamp] && <span style={{ display: 'inline-block', borderRadius: 5, padding: 3, marginTop: 4, backgroundColor: 'rgba(0, 0, 0, 0.08)' }}>{isAbort[item?.timestamp]}</span>}
-                                            </> : <div className='user-question'>{item.text}</div>
-                                    }
-                                    {/* <div className={`timestamp ${item.isBot ? 'bot-timestamp' : 'user-timestamp'}`}>
+                <Content className="content">
+                    <List
+                        className='list'
+                        bordered={false}
+                        dataSource={message}
+                        split={false}
+                        locale={{
+                            emptyText: <div style={{ display: 'inline-flex', alignItems: 'center', flexFlow: 'column' }}>
+                                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#333', fontSize: 18, fontWeight: 500 }}>
+                                    <Icon style={{ height: 100 }} component={DeepseekSvg} />Cyber-D1</div>
+                                <span style={{ color: '#333' }}>我可以帮你搜索、答疑、推理、写作、提建议，请把你的想法告诉我吧。</span>
+                            </div>
+                        }}
+                        renderItem={item => (
+                            <List.Item
+                                className={`message-item ${item.isBot ? 'bot' : 'user'}`}
+                            >
+                                <div className="message-container">
+                                    {item.isBot && <Avatar
+                                        size='large'
+                                        style={{ backgroundColor: '#fff' }}
+                                        icon={<Icon component={DeepseekSvg} />}
+                                    />}
+                                    <div className={`message-content ${item.isBot ? 'bot-content' : 'user-content'}`}>
+                                        {
+                                            item.isBot ?
+                                                <>
+                                                    <Collapse
+                                                        activeKey={activeKey?.[item?.timestamp]}
+                                                        onChange={(val) => setActiveKey((pre) => ({ ...pre, [item?.timestamp]: val?.[0] === '1' ? val : null }))}
+                                                        bordered={false}
+                                                        items={[{
+                                                            key: '1', label: <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Icon style={{ width: 18, height: 18 }} component={SeekSvg} /><p className='think-title'>{fortune?.[item?.timestamp] ? '已深度思考' : '思考中:'}</p></div>, children:
+                                                                <>
+                                                                    {
+                                                                        think?.[item?.timestamp] || fortune?.[item?.timestamp] ?
+                                                                            <p className='think-text'>{think?.[item?.timestamp]}<div ref={thinkEndRef} /></p>
+                                                                            : <LoadingOutlined />
+                                                                    }
+                                                                </>
+                                                        }]}
+                                                    />
+                                                    {fortune?.[item?.timestamp] && <ReactMarkdown remarkPlugins={[remarkGfm, rehypeHighlight]}>
+                                                        {fortune?.[item?.timestamp]}
+                                                    </ReactMarkdown>}
+                                                    {isAbort[item?.timestamp] && <span style={{ display: 'inline-block', borderRadius: 5, padding: 3, marginTop: 4, backgroundColor: 'rgba(0, 0, 0, 0.08)' }}>{isAbort[item?.timestamp]}</span>}
+                                                </> : <div className='user-question'>{item.text}</div>
+                                        }
+                                        {/* <div className={`timestamp ${item.isBot ? 'bot-timestamp' : 'user-timestamp'}`}>
                                         {dayjs(item.timestamp).format('HH:mm:ss')}
                                     </div> */}
+                                    </div>
                                 </div>
-                            </div>
-                        </List.Item>
-                    )}
-                />
-                <div ref={messagesEndRef} />
-            </Content>
-
-            <div className="input-container">
-                <div className='input-content'>
-                    <TextArea
-                        className='input'
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onPressEnter={(e) => { e.preventDefault(); handleSubmit(e); }}
-                        autoSize={{ minRows: 2, maxRows: 6 }}
-                        placeholder="输入任何问题"
+                            </List.Item>
+                        )}
                     />
-                    <Icon style={{ width: 32, height: 32, marginBottom: 10 }} component={!loading ? SendSvg : CancelSvg} onClick={!loading ? handleSubmit : handleCancel} />
+                    <div ref={messagesEndRef} />
+                </Content>
+
+                <div className="input-container">
+                    <div className='input-content'>
+                        <TextArea
+                            className='input'
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            onPressEnter={(e) => { e.preventDefault(); handleSubmit(e); }}
+                            autoSize={{ minRows: 2, maxRows: 6 }}
+                            placeholder="输入任何问题"
+                        />
+                        <Icon style={{ width: 32, height: 32, marginBottom: 10 }} component={!loading ? SendSvg : CancelSvg} onClick={!loading ? handleSubmit : handleCancel} />
+                    </div>
                 </div>
-            </div>
-        </Layout>
+            </Layout>
+            <Modal
+                centered
+                closable={false}
+                maskClosable={false}
+                open={open}
+                footer={<div><Button type='primary' loading={submitLoading} onClick={() => {
+                    setSubmitLoading(true);
+                    setTimeout(() => {
+                        setSubmitLoading(false);
+                        if (authCode === '595') {
+                            messageApi.success('验证通过')
+                            setOpen(false);
+                        } else {
+                            messageApi.error('验证令牌错误或已失效')
+                        }
+                    }, 1000)
+                }}>Go</Button></div>}>
+                内测令牌：<Input value={authCode} onChange={(e) => setAuthCode(e.target.value)} style={{ width: 120 }} />
+            </Modal>
+            {contextHolder}
+        </>
     );
 };
 
