@@ -7,6 +7,9 @@ import Icon from '@ant-design/icons';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';  // 引入KaTeX样式 
 import 'highlight.js/styles/github.css';
 // import dayjs from 'dayjs';
 import './Test.css';
@@ -214,8 +217,9 @@ const ChatInterface = () => {
                                                                 </>
                                                         }]}
                                                     />
-                                                    {fortune?.[item?.timestamp] && <ReactMarkdown remarkPlugins={[remarkGfm, rehypeHighlight]}>
-                                                        {fortune?.[item?.timestamp]}
+                                                    {fortune?.[item?.timestamp] && <ReactMarkdown children={fortune?.[item?.timestamp]} remarkPlugins={[remarkMath, remarkGfm, rehypeHighlight]}
+                                                        rehypePlugins={[rehypeKatex]}>
+                                                        {/* {fortune?.[item?.timestamp]} */}
                                                     </ReactMarkdown>}
                                                     {isAbort[item?.timestamp] && <span style={{ display: 'inline-block', borderRadius: 5, padding: 3, marginTop: 4, backgroundColor: 'rgba(0, 0, 0, 0.08)' }}>{isAbort[item?.timestamp]}</span>}
                                                 </> : <div className='user-question'>{item.text}</div>
