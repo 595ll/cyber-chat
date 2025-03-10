@@ -50,11 +50,11 @@ const ChatInterface = () => {
         thinkEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
-    useEffect(() => {
-        if (!stopScroll) {
-            scrollToBottom();
-        }
-    }, [think, fortune, stopScroll]);
+    // useEffect(() => {
+    //     if (!stopScroll) {
+    //         scrollToBottom();
+    //     }
+    // }, [think, fortune, stopScroll]);
 
     useEffect(() => {
         setOpen(true);
