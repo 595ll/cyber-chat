@@ -196,8 +196,9 @@ body {
 .user-question {
     display: inline-block;
     max-width: 100%;
+    min-width: 40px;
     color: #ffff;
-    text-align: left;
+    text-align: center;
     padding: 10px;
     border-radius: 15px;
     background-color: #36393d;
