@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/cyber-chat/static/css/main.786dde7d.css",
+    "main.css": "/cyber-chat/static/css/main.5027e13a.css",
     "main.js": "/cyber-chat/static/js/main.eec8844c.js",
     "static/js/453.228a75db.chunk.js": "/cyber-chat/static/js/453.228a75db.chunk.js",
     "static/media/bg.png": "/cyber-chat/static/media/bg.44bc2d9e7a7929f95871.png",
@@ -65,12 +65,12 @@
     "static/media/KaTeX_Size3-Regular.woff": "/cyber-chat/static/media/KaTeX_Size3-Regular.7947224e8a9914fa332b.woff",
     "static/media/KaTeX_Size3-Regular.woff2": "/cyber-chat/static/media/KaTeX_Size3-Regular.e1951519f6f0596f7356.woff2",
     "index.html": "/cyber-chat/index.html",
-    "main.786dde7d.css.map": "/cyber-chat/static/css/main.786dde7d.css.map",
+    "main.5027e13a.css.map": "/cyber-chat/static/css/main.5027e13a.css.map",
     "main.eec8844c.js.map": "/cyber-chat/static/js/main.eec8844c.js.map",
     "453.228a75db.chunk.js.map": "/cyber-chat/static/js/453.228a75db.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.786dde7d.css",
+    "static/css/main.5027e13a.css",
     "static/js/main.eec8844c.js"
   ]
 }
