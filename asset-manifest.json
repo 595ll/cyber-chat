@@ -1,8 +1,9 @@
 {
   "files": {
-    "main.css": "/cyber-chat/static/css/main.1c2fc393.css",
-    "main.js": "/cyber-chat/static/js/main.265a466d.js",
+    "main.css": "/cyber-chat/static/css/main.786dde7d.css",
+    "main.js": "/cyber-chat/static/js/main.eec8844c.js",
     "static/js/453.228a75db.chunk.js": "/cyber-chat/static/js/453.228a75db.chunk.js",
+    "static/media/bg.png": "/cyber-chat/static/media/bg.44bc2d9e7a7929f95871.png",
     "static/media/KaTeX_AMS-Regular.ttf": "/cyber-chat/static/media/KaTeX_AMS-Regular.853be92419a6c3766b9a.ttf",
     "static/media/KaTeX_Main-Regular.ttf": "/cyber-chat/static/media/KaTeX_Main-Regular.9eba1d77abcf2aa6e94e.ttf",
     "static/media/KaTeX_Main-Bold.ttf": "/cyber-chat/static/media/KaTeX_Main-Bold.8169508bf58f8bd92ad8.ttf",
@@ -64,12 +65,12 @@
     "static/media/KaTeX_Size3-Regular.woff": "/cyber-chat/static/media/KaTeX_Size3-Regular.7947224e8a9914fa332b.woff",
     "static/media/KaTeX_Size3-Regular.woff2": "/cyber-chat/static/media/KaTeX_Size3-Regular.e1951519f6f0596f7356.woff2",
     "index.html": "/cyber-chat/index.html",
-    "main.1c2fc393.css.map": "/cyber-chat/static/css/main.1c2fc393.css.map",
-    "main.265a466d.js.map": "/cyber-chat/static/js/main.265a466d.js.map",
+    "main.786dde7d.css.map": "/cyber-chat/static/css/main.786dde7d.css.map",
+    "main.eec8844c.js.map": "/cyber-chat/static/js/main.eec8844c.js.map",
     "453.228a75db.chunk.js.map": "/cyber-chat/static/js/453.228a75db.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.1c2fc393.css",
-    "static/js/main.265a466d.js"
+    "static/css/main.786dde7d.css",
+    "static/js/main.eec8844c.js"
   ]
 }
